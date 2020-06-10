@@ -1,17 +1,30 @@
-<h1>My Tasks</h1>
+<div class="wrapper">
+  <h1>My Tasks</h1>
 
-<ul class="tasks">
-  <% @tasks.each do |t| %>
-    <%if t.completed?%>
-      <li class="task-items"><i class="far fa-check-square"></i><%= link_to t.title, task_path(id: t.id) %><%= link_to task_path(t), method: :delete, data: {confirm: 'Are you sure?'} do %>
-        <i class="far fa-trash-alt"></i>
-      <% end %></li>
-    <%else%>
-      <li class="task-items"><i class="far fa-square"></i><%= link_to t.title, task_path(id: t.id) %><%= link_to task_path(t), method: :delete, data: {confirm: 'Are you sure?'} do %>
-       <i class="far fa-trash-alt"></i>
-      <% end %></li>
-    <%end%>
+  <ul class="tasks">
+    <% @tasks.each do |t| %>
+      <% if t.completed? %>
+        <li class="task-items">
+          <i class="far fa-check-square"></i>
+          <%= link_to t.title, task_path(t) %>
+          <%= link_to task_path(t), method: :delete, data: {confirm: "Delete #{t.title}?"} do %>
+            <i class="far fa-trash-alt"></i>
+          <% end %>
+        </li>
+      <% else %>
+        <li class="task-items">
+          <i class="far fa-square"></i>
+          <%= link_to t.title, task_path(t) %>
+          <%= link_to task_path(t), method: :delete, data: {confirm: "Delete #{t.title}?"} do %>
+            <i class="far fa-trash-alt"></i>
+          <% end %>
+        </li>
+      <% end %>
+    <% end %>
+  </ul>
+
+  <%= link_to new_task_path do %>
+    <i class="fas fa-plus"></i>
   <% end %>
-</ul>
-
-<%=link_to "Add a new task", new_task_path%>
+  <%= link_to "Add a new task", new_task_path %>
+</div>
