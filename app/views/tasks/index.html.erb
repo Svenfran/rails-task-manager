@@ -4,7 +4,7 @@
   <ul class="tasks">
     <% @tasks.each do |t| %>
       <% if t.completed? %>
-        <li class="task-items">
+        <li class="task-items draggable" draggable="true">
           <i class="far fa-check-square"></i>
           <%= link_to t.title, task_path(t) %>
           <%= link_to task_path(t), method: :delete, data: {confirm: "Delete #{t.title}?"} do %>
@@ -12,7 +12,7 @@
           <% end %>
         </li>
       <% else %>
-        <li class="task-items">
+        <li class="task-items draggable" draggable="true">
           <i class="far fa-square"></i>
           <%= link_to t.title, task_path(t) %>
           <%= link_to task_path(t), method: :delete, data: {confirm: "Delete #{t.title}?"} do %>
@@ -28,3 +28,46 @@
   <% end %>
   <%= link_to "Add a new task", new_task_path %>
 </div>
+
+<script>
+  const draggables = document.querySelectorAll('.draggable');
+  const tasks = document.querySelectorAll('.tasks');
+
+  draggables.forEach(draggable => {
+    draggable.addEventListener('dragstart', () => {
+      draggable.classList.add('dragging')
+    });
+
+    draggable.addEventListener('dragend', () => {
+      draggable.classList.remove('dragging')
+    });
+  });
+
+  tasks.forEach(task => {
+    task.addEventListener('dragover', event => {
+      event.preventDefault()
+      const afterElement = getDragAfterElement(task, event.clientY)
+      const draggable = document.querySelector('.dragging')
+      if (afterElement == null) {
+        task.appendChild(draggable)
+      } else {
+        task.insertBefore(draggable, afterElement)
+      }
+    })
+  });
+
+  function getDragAfterElement(task, y) {
+    const draggableElements = [...task.querySelectorAll('.draggable:not(.dragging)')]
+
+    return draggableElements.reduce((closest, child) => {
+      const box = child.getBoundingClientRect()
+      const offset = y - box.top - box.height / 2
+      if (offset < 0 && offset > closest.offset) {
+        return { offset: offset, element: child }
+      } else {
+        return closest
+      }
+    }, { offset: Number.NEGATIVE_INFINITY }).element
+  };
+
+</script>

@@ -28,7 +28,7 @@ a {
 }
 
 .task-details {
-  background: #ececec;
+  background: rgb(146, 201, 201);
   width: 50vw;
   height: 100px;
   border-radius: 8px;
@@ -53,6 +53,10 @@ ul {
 
 .task-items {
   margin-bottom: 8px;
+  padding: 12px;
+  background: rgb(146, 201, 201);
+  border: 1px solid #999;
+  border-radius: 8px;
 }
 
 .task-items, .far {
@@ -61,4 +65,8 @@ ul {
 
 .task-items, .fa-trash-alt {
   margin-left: 8px;
+}
+
+.daggable.dragging {
+  opacity: .5;
 }
